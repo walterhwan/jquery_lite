@@ -1,1 +1,211 @@
-!function(e){var r={};function n(o){if(r[o])return r[o].exports;var t=r[o]={i:o,l:!1,exports:{}};return e[o].call(t.exports,t,t.exports,n),t.l=!0,t.exports}n.m=e,n.c=r,n.d=function(e,r,o){n.o(e,r)||Object.defineProperty(e,r,{configurable:!1,enumerable:!0,get:o})},n.r=function(e){Object.defineProperty(e,"__esModule",{value:!0})},n.n=function(e){var r=e&&e.__esModule?function(){return e.default}:function(){return e};return n.d(r,"a",r),r},n.o=function(e,r){return Object.prototype.hasOwnProperty.call(e,r)},n.p="",n(n.s=1)}([function(e,r){e.exports=class{constructor(e){}}},function(e,r,n){n(0);console.log("script is loaded"),window.$l=function(e){console.log("we are in core");let r=document.querySelectorAll(e);return Array.from(r)}}]);
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ "./lib/dom_node_collection.js":
+/*!************************************!*\
+  !*** ./lib/dom_node_collection.js ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+class DOMNodeCollection {
+  constructor(htmlEls) {
+    this.htmlEls = htmlEls;
+    console.log("Are we here");
+  }
+
+  html(str) {
+    if (str === undefined) {
+      return this.htmlEls[0].innerHTML;
+    } else {
+      this.htmlEls.forEach(el => {
+        el.innerHTML = str;
+      });
+      return this;
+    }
+  }
+
+  empty() {
+    return this.html('');
+  }
+
+  append(arg) {
+    if(arg.constructor.name === "DOMNodeCollection") {
+      arg.htmlEls.forEach(el => {
+        this.append(el);
+      });
+    } else if (arg.constructor.name.includes('HTML')) {
+      this.htmlEls.forEach(el => {
+        el.innerHTML += arg.outerHTML;
+      });
+    } else if (arg.constructor.name === 'String') {
+      this.htmlEls.forEach(el => {
+        el.innerHTML += arg;
+      });
+    }
+  }
+
+  children() {
+    let childrenArr = [];
+    this.htmlEls.forEach(el => {
+      for (let i = 0; i < el.children.length; i++) {
+        childrenArr.push(el.children[i]);
+      }
+      // childrenArr = childrenArr.concat(el.children);
+    });
+    return new DOMNodeCollection(childrenArr);
+  }
+
+  parent() {
+    let parentArr = [];
+    // debugger
+    this.htmlEls.forEach(el => {
+      if (!parentArr.includes(el.parentElement)) {
+        parentArr = parentArr.concat(el.parentElement);
+      }
+    });
+    return new DOMNodeCollection(parentArr);
+  }
+
+  find(selector) {
+    
+    let arr = [];
+    this.htmlEls.forEach(el => {
+      // let fcn = this;
+      let els = el.querySelectorAll(selector);
+
+      for (const el2 of els) {
+        arr.push(el2);
+      }
+    });
+
+    return new DOMNodeCollection(arr);
+  }
+
+  remove() {
+    this.htmlEls.forEach(el => {
+      el.remove();
+    });
+  }
+
+  toString() {
+    return "DOMNodeCollection";
+  }
+
+  // attr, addClass, and removeClass
+}
+
+module.exports = DOMNodeCollection;
+
+
+/***/ }),
+
+/***/ "./lib/main.js":
+/*!*********************!*\
+  !*** ./lib/main.js ***!
+  \*********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+const DOMNodeCollection = __webpack_require__(/*! ./dom_node_collection.js */ "./lib/dom_node_collection.js");
+console.log('script is loaded');
+
+function $l(arg) {
+  if (arg instanceof HTMLElement) {
+    return new DOMNodeCollection([arg]);
+  } else {
+    let nodes = document.querySelectorAll(arg);
+    return new DOMNodeCollection(Array.from(nodes));
+  }
+}
+
+window.$l = $l;
+
+
+/***/ }),
+
+/***/ 0:
+/*!*****************************************!*\
+  !*** multi ./lib/main.js ./lib/main.js ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(/*! ./lib/main.js */"./lib/main.js");
+module.exports = __webpack_require__(/*! /Users/appacademy/Desktop/W6D4/jQuery_lite/lib/main.js */"./lib/main.js");
+
+
+/***/ })
+
+/******/ });
+//# sourceMappingURL=jquery_lite.js.map
