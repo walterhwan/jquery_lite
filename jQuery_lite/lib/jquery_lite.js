@@ -138,7 +138,7 @@ class DOMNodeCollection {
   }
 
   find(selector) {
-    
+
     let arr = [];
     this.htmlEls.forEach(el => {
       // let fcn = this;
@@ -157,6 +157,20 @@ class DOMNodeCollection {
       el.remove();
     });
   }
+
+  on(type, callback) {
+    this.htmlEls.forEach(el => {
+      el.addEventListener(type, callback);
+    });
+  }
+
+  off(type, callback) {
+    this.htmlEls.forEach(el => {
+      el.removeEventListener(type, callback);
+    });
+  }
+
+
 
   toString() {
     return "DOMNodeCollection";
