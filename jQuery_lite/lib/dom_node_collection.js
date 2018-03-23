@@ -90,8 +90,6 @@ class DOMNodeCollection {
     });
   }
 
-
-
   toString() {
     return "DOMNodeCollection";
   }

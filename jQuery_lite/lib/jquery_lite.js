@@ -170,8 +170,6 @@ class DOMNodeCollection {
     });
   }
 
-
-
   toString() {
     return "DOMNodeCollection";
   }
@@ -204,6 +202,22 @@ function $l(arg) {
     return new DOMNodeCollection(Array.from(nodes));
   }
 }
+
+Function.prototype.extend = function(...args) {
+  let obj = args[0];
+  for(const arg of args) {
+    Object.keys(arg).forEach(key => {
+      obj[key] = arg[key];
+    });
+  }
+
+  return obj;
+};
+
+Function.prototype.ajax = function (obj) {
+  let {url, type} = obj;
+  
+};
 
 window.$l = $l;
 // window.addEventListener("load", ()=> console.log("Hi HI"));
